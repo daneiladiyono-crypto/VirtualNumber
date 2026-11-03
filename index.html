@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="biru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neel Numbers - Nomor Virtual untuk WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4f1ff; --card:#ffffff; --ink:#1b1740; --muted:#6b6694;
+  --line:#e0daf7; --wa:#5b3df5; --wa-soft:#ebe6ff; --amber:#ffc83d; --err:#c62350;
+  --head:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0e0b1f; --card:#1a1633; --ink:#efeaff; --muted:#a39cc9; --line:#2d2751; --wa:#9a85ff; --wa-soft:#2a2252; --amber:#ffc83d; --err:#ff7a9c;}
+}
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.5;min-height:100vh}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:24px 18px 56px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
+.brand{font-family:var(--head);font-weight:800;font-size:1.35rem;letter-spacing:-.02em}
+.brand b{color:var(--wa)}
+.badge{font-size:.8rem;background:var(--wa-soft);color:var(--wa);padding:4px 10px;border-radius:999px;font-weight:700}
+.hero{margin-bottom:28px}
+.hero h1{font-family:var(--head);font-weight:800;font-size:clamp(2rem,6vw,3.4rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 10px;max-width:14ch}
+.hero p{color:var(--muted);margin:0;max-width:52ch}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+@media(max-width:820px){.layout{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.panel h2{font-family:var(--head);font-size:1.15rem;margin:0 0 12px}
+.tools{display:flex;gap:8px;margin-bottom:12px}
+.tools input{flex:1;min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--wa);color:#fff}
+@media (prefers-color-scheme:dark){.btn:not(.ghost){color:#0e0b1f}}
+.btn.ghost{background:var(--wa-soft);color:var(--wa)}
+.btn:disabled{opacity:.55;cursor:default}
+.list{display:flex;flex-direction:column;gap:6px;max-height:520px;overflow:auto}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;background:var(--paper);border:1px solid transparent;border-radius:12px;padding:11px 12px;cursor:pointer}
+.row:hover{border-color:var(--line)}
+.row[aria-pressed="true"]{border-color:var(--wa);background:var(--wa-soft)}
+.num{font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.meta{font-size:.82rem;color:var(--muted)}
+.state{padding:18px 6px;color:var(--muted);text-align:center}
+.state.err{color:var(--err)}
+.dial{font-family:var(--head);font-weight:800;font-size:clamp(1.5rem,5vw,2.1rem);letter-spacing:-.01em;word-break:break-all;margin:0 0 4px;font-variant-numeric:tabular-nums}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 16px}
+.manual{display:flex;gap:8px;margin-bottom:14px}
+.manual input{flex:1;min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.auto{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted);margin-bottom:12px}
+.otp{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;background:var(--paper)}
+.otp .time{font-size:.85rem;color:var(--muted);text-align:right}
+.code{font-family:var(--head);font-weight:800;font-size:1.9rem;letter-spacing:.08em;font-variant-numeric:tabular-nums;background:var(--amber);color:#1b1740;padding:2px 14px;border-radius:10px;border:0;cursor:pointer}
+pre{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px;overflow:auto;font-size:.82rem;margin:0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+footer{margin-top:28px;color:var(--muted);font-size:.85rem}
+@media(prefers-reduced-motion:reduce){.toast{transition:none}}
+
+/* tema warna */
+html[data-theme="biru"]{--paper:#eef5ff;--line:#d5e3f7;--wa:#1a63e0;--wa-soft:#dce9ff;--ink:#0f2447;--muted:#5a6f8f}
+html[data-theme="hijau"]{--paper:#edf7f0;--line:#d2e6d8;--wa:#178a4a;--wa-soft:#d8f0e0;--ink:#11301f;--muted:#587a66}
+html[data-theme="oranye"]{--paper:#fff4ea;--line:#f2dcc7;--wa:#d94f12;--wa-soft:#ffe3d0;--ink:#3a1a0a;--muted:#8a6a55}
+html[data-theme="pink"]{--paper:#fff0f5;--line:#f5d3df;--wa:#d6246e;--wa-soft:#ffdbe8;--ink:#3d1024;--muted:#8f5d72}
+@media (prefers-color-scheme:dark){
+html[data-theme="biru"]{--paper:#0a1424;--card:#12213a;--ink:#e8f0ff;--muted:#93a8c9;--line:#213556;--wa:#5aa2ff;--wa-soft:#1b3358}
+html[data-theme="hijau"]{--paper:#0a1a12;--card:#12281b;--ink:#e6f5ec;--muted:#8fb09b;--line:#20402d;--wa:#4bd68a;--wa-soft:#17402a}
+html[data-theme="oranye"]{--paper:#1a0f08;--card:#2a1a0f;--ink:#fff0e4;--muted:#c9a48a;--line:#4a2f1d;--wa:#ff8a4c;--wa-soft:#4a2a15}
+html[data-theme="pink"]{--paper:#1c0a13;--card:#2b1220;--ink:#ffe9f1;--muted:#c996ad;--line:#4a2236;--wa:#ff6fa5;--wa-soft:#4a1b32}
+}
+.themes{display:flex;gap:8px;align-items:center}
+.dot{width:26px;height:26px;border-radius:50%;border:3px solid var(--card);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+.dot[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.head-right{display:flex;align-items:center;gap:12px}
+.wa-logo{display:block;flex:none}
+.hero .wa-logo{margin-bottom:14px;filter:drop-shadow(0 6px 14px rgba(37,211,102,.35))}
+#wa{align-items:center;gap:8px}
+#wa .wa-logo{display:inline-block;vertical-align:-4px;margin-right:6px}
+.dev{margin-top:28px}
+.dev h2{font-family:var(--head);font-size:1.15rem;margin:0 0 12px}
+.socials{display:flex;flex-wrap:wrap;gap:10px}
+.social{display:inline-flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 16px;color:var(--ink);text-decoration:none;font-weight:700}
+.social:hover{border-color:var(--wa)}
+.social .ico{flex:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Neel <b>Numbers</b></div>
+    <div class="head-right">
+      <div class="themes" role="group" aria-label="Pilih warna">
+        <button class="dot" data-t="biru" style="background:#1a63e0" aria-label="Biru" aria-pressed="true" type="button"></button>
+        <button class="dot" data-t="hijau" style="background:#178a4a" aria-label="Hijau" aria-pressed="false" type="button"></button>
+        <button class="dot" data-t="oranye" style="background:#e0561b" aria-label="Oranye" aria-pressed="false" type="button"></button>
+        <button class="dot" data-t="pink" style="background:#d6246e" aria-label="Pink" aria-pressed="false" type="button"></button>
+        <button class="dot" data-t="ungu" style="background:#5b3df5" aria-label="Ungu" aria-pressed="false" type="button"></button>
+      </div>
+      <span class="badge">Gratis</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <svg class="wa-logo " width="64" height="64" viewBox="0 0 32 32" aria-hidden="true"><path fill="#25D366" d="M16 2.5A13.5 13.5 0 0 0 4.3 22.7L2.5 29.5l6.9-1.8A13.5 13.5 0 1 0 16 2.5z"/><path fill="#fff" d="M22.3 19.2c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.200-.2.2-.4.2-.7.1-.3-.2-1.400-.5-2.600-1.600-1-.9-1.600-1.900-1.800-2.200-.2-.3 0-.5.1-.7.1-.1.300-.4.500-.5.1-.2.200-.3.300-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.700-1-2.300-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.400-.3.300-1 1-1 2.400s1 2.800 1.200 3c.1.200 2.100 3.200 5.100 4.500.7.300 1.300.5 1.700.6.700.2 1.400.2 1.900.1.600-.1 1.900-.8 2.100-1.500.3-.7.300-1.400.2-1.500-.1-.1-.3-.2-.6-.4z"/></svg>
+    <h1>Nomor kosong untuk WhatsApp</h1>
+    <p>Pilih nomor virtual, pakai untuk daftar WhatsApp, lalu cek kode OTP yang masuk langsung di sini.</p>
+  </section>
+
+  <div class="layout">
+    <section class="panel" aria-labelledby="h-list">
+      <h2 id="h-list">Nomor tersedia</h2>
+      <div class="tools">
+        <input id="search" type="search" placeholder="Cari nomor atau negara" aria-label="Cari nomor atau negara">
+        <button class="btn ghost" id="refresh" type="button">Muat ulang</button>
+      </div>
+      <div id="list" class="list" aria-live="polite"><div class="state">Memuat nomor...</div></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-otp">
+      <h2 id="h-otp">Cek OTP</h2>
+      <p id="dial" class="dial">Belum ada nomor dipilih</p>
+      <div id="dialMeta" class="meta">Pilih nomor dari daftar, atau masukkan nomor sendiri.</div>
+      <div class="actions">
+        <button class="btn" id="check" type="button" disabled>Cek OTP</button>
+        <button class="btn ghost" id="copy" type="button" disabled>Salin nomor</button>
+        <a class="btn ghost" id="wa" href="https://web.whatsapp.com/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block"><svg class="wa-logo " width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><path fill="#25D366" d="M16 2.5A13.5 13.5 0 0 0 4.3 22.7L2.5 29.5l6.9-1.8A13.5 13.5 0 1 0 16 2.5z"/><path fill="#fff" d="M22.3 19.2c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.200-.2.2-.4.2-.7.1-.3-.2-1.400-.5-2.600-1.600-1-.9-1.600-1.900-1.800-2.200-.2-.3 0-.5.1-.7.1-.1.300-.4.500-.5.1-.2.200-.3.300-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.700-1-2.300-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.400-.3.300-1 1-1 2.400s1 2.800 1.200 3c.1.200 2.100 3.200 5.100 4.500.7.300 1.300.5 1.700.6.700.2 1.400.2 1.900.1.600-.1 1.900-.8 2.100-1.500.3-.7.300-1.400.2-1.500-.1-.1-.3-.2-.6-.4z"/></svg>Buka WhatsApp</a>
+      </div>
+      <form class="manual" id="manualForm" onsubmit="return false">
+        <input id="manual" type="tel" inputmode="tel" placeholder="+6281234567890" aria-label="Nomor manual">
+        <button class="btn ghost" id="useManual" type="button">Pakai</button>
+      </form>
+      <label class="auto"><input type="checkbox" id="auto"> Cek otomatis tiap 7 detik</label>
+      <div id="result" aria-live="polite"><div class="state">Hasil OTP akan muncul di sini.</div></div>
+    </section>
+  </div>
+
+  <section class="dev" aria-labelledby="h-dev">
+    <h2 id="h-dev">Hubungi developer</h2>
+    <div class="socials">
+      <a class="social" href="https://www.tiktok.com/@_danielk4zz" target="_blank" rel="noopener"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>@_danielk4zz</span></a>
+      <a class="social" href="https://wa.me/6285199384842" target="_blank" rel="noopener"><svg class="ico" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><path fill="#25D366" d="M16 2.5A13.5 13.5 0 0 0 4.3 22.7L2.5 29.5l6.9-1.8A13.5 13.5 0 1 0 16 2.5z"/><path fill="#fff" d="M22.3 19.2c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7.1-.1.3-.4.5-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.9-.8 2.1-1.5.3-.7.3-1.4.2-1.5-.1-.1-.3-.2-.6-.4z"/></svg><span>WhatsApp Daniel</span></a>
+    </div>
+  </section>
+
+  <footer>Neel Numbers. Nomor virtual bersifat publik dan dipakai bergantian, jangan dipakai untuk akun penting.</footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const API_LIST = "https://api.synoxcloud.xyz/tools/virtual-numbers?apikey=FREE";
+const API_OTP = n => "https://api.synoxcloud.xyz/tools/otp-checker?number=" + encodeURIComponent(n) + "&apikey=FREE";
+
+const $ = id => document.getElementById(id);
+let numbers = [];
+let selected = null;
+let timer = null;
+
+function toast(t){
+  const el = $("toast"); el.textContent = t; el.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(()=>el.classList.remove("show"), 1600);
+}
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function normalize(n){ n = String(n).trim().replace(/[^\d+]/g,""); return n && n[0] !== "+" ? "+" + n : n; }
+
+function findArray(j){
+  if (Array.isArray(j)) return j;
+  if (j && typeof j === "object"){
+    for (const k of ["result","results","data","numbers","list","messages","sms"]){
+      if (j[k] !== undefined){ const r = findArray(j[k]); if (r) return r; }
+    }
+    for (const v of Object.values(j)){ if (Array.isArray(v)) return v; }
+    for (const v of Object.values(j)){ if (v && typeof v === "object"){ const r = findArray(v); if (r) return r; } }
+  }
+  return null;
+}
+function toNumberItem(it){
+  if (typeof it === "string" || typeof it === "number") return {number: normalize(it), country: ""};
+  if (!it || typeof it !== "object") return null;
+  let n = it.number || it.phone || it.nomor || it.msisdn || it.phoneNumber || it.full_number || it.phone_number;
+  if (!n){ for (const v of Object.values(it)){ if (/^\+?\d{6,15}$/.test(String(v))) { n = v; break; } } }
+  if (!n) return null;
+  return {number: normalize(n), country: it.country || it.country_name || it.negara || it.region || ""};
+}
+
+async function loadNumbers(){
+  const list = $("list");
+  list.innerHTML = '<div class="state">Memuat nomor...</div>';
+  try{
+    const res = await fetch(API_LIST);
+    if (!res.ok) throw new Error("Server membalas " + res.status);
+    const json = await res.json();
+    const arr = findArray(json);
+    numbers = (arr || []).map(toNumberItem).filter(Boolean);
+    if (!numbers.length) throw new Error("Daftar nomor kosong. Coba muat ulang beberapa saat lagi.");
+    render();
+  }catch(e){
+    list.innerHTML = '<div class="state err">Gagal memuat nomor: ' + esc(e.message) + '. Periksa koneksi lalu tekan Muat ulang.</div>';
+  }
+}
+
+function render(){
+  const q = $("search").value.trim().toLowerCase();
+  const rows = numbers.filter(n => !q || n.number.toLowerCase().includes(q) || n.country.toLowerCase().includes(q));
+  const list = $("list");
+  if (!rows.length){ list.innerHTML = '<div class="state">Tidak ada nomor yang cocok dengan pencarian.</div>'; return; }
+  list.innerHTML = rows.map(n =>
+    '<button type="button" class="row" data-n="' + esc(n.number) + '" aria-pressed="' + (selected && selected.number === n.number) + '">' +
+    '<span class="num">' + esc(n.number) + '</span><span class="meta">' + esc(n.country) + '</span></button>'
+  ).join("");
+}
+
+function select(item){
+  selected = item;
+  $("dial").textContent = item.number;
+  $("dialMeta").textContent = item.country || "Nomor virtual";
+  $("check").disabled = false; $("copy").disabled = false;
+  $("result").innerHTML = '<div class="state">Daftarkan nomor ini di WhatsApp, lalu tekan Cek OTP.</div>';
+  render();
+}
+
+function fmtTime(v){
+  if (!v) return "";
+  const d = new Date(v);
+  if (isNaN(d)) return String(v);
+  return d.toLocaleString("id-ID", {day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit", second:"2-digit"});
+}
+
+function renderResult(json){
+  const arr = (json && json.result && Array.isArray(json.result.otps)) ? json.result.otps : findArray(json);
+  const box = $("result");
+  const items = (arr || []).map(m => {
+    if (m === null || m === undefined) return null;
+    if (typeof m !== "object") return {code: String(m), time: ""};
+    let code = m.otp || m.code || m.kode || "";
+    if (!code){ const f = String(m.message || m.text || m.body || m.content || m.sms || "").match(/\b\d{4,8}\b/); if (f) code = f[0]; }
+    const time = m.time || m.date || m.created_at || m.createdAt || m.timestamp || m.received_at || "";
+    return code ? {code: String(code), time} : null;
+  }).filter(Boolean).slice(0, 10);
+  if (!items.length){
+    box.innerHTML = '<div class="state">Belum ada OTP masuk. Minta kode di WhatsApp lalu cek lagi.</div>';
+    return;
+  }
+  box.innerHTML = items.map(i =>
+    '<div class="otp"><button type="button" class="code" data-code="' + esc(i.code) + '" title="Salin kode">' + esc(i.code) + '</button>' +
+    '<span class="time">' + esc(fmtTime(i.time)) + '</span></div>'
+  ).join("");
+}
+
+async function checkOtp(){
+  if (!selected) return;
+  const btn = $("check"); btn.disabled = true; btn.textContent = "Mengecek...";
+  try{
+    const res = await fetch(API_OTP(selected.number));
+    if (!res.ok) throw new Error("Server membalas " + res.status);
+    renderResult(await res.json());
+  }catch(e){
+    $("result").innerHTML = '<div class="state err">Gagal mengecek OTP: ' + esc(e.message) + '. Coba lagi.</div>';
+  }finally{
+    btn.disabled = false; btn.textContent = "Cek OTP";
+  }
+}
+
+function setAuto(){
+  clearInterval(timer);
+  if ($("auto").checked) timer = setInterval(()=>{ if (selected) checkOtp(); }, 7000);
+}
+
+$("list").addEventListener("click", e => {
+  const b = e.target.closest(".row"); if (!b) return;
+  select(numbers.find(n => n.number === b.dataset.n));
+});
+$("result").addEventListener("click", e => {
+  const c = e.target.closest(".code"); if (!c) return;
+  navigator.clipboard.writeText(c.dataset.code).then(()=>toast("Kode disalin"), ()=>toast("Gagal menyalin"));
+});
+$("search").addEventListener("input", render);
+$("refresh").addEventListener("click", loadNumbers);
+$("check").addEventListener("click", checkOtp);
+$("auto").addEventListener("change", setAuto);
+$("copy").addEventListener("click", () => {
+  if (!selected) return;
+  navigator.clipboard.writeText(selected.number).then(()=>toast("Nomor disalin"), ()=>toast("Gagal menyalin"));
+});
+$("useManual").addEventListener("click", () => {
+  const n = normalize($("manual").value);
+  if (!/^\+\d{6,15}$/.test(n)){ toast("Format nomor tidak valid"); return; }
+  select({number: n, country: "Nomor manual"});
+});
+
+function setTheme(t){
+  document.documentElement.setAttribute("data-theme", t);
+  document.querySelectorAll(".dot").forEach(d => d.setAttribute("aria-pressed", d.dataset.t === t));
+  try{ localStorage.setItem("neel-theme", t); }catch(e){}
+}
+document.querySelector(".themes").addEventListener("click", e => {
+  const d = e.target.closest(".dot"); if (d) setTheme(d.dataset.t);
+});
+try{ const saved = localStorage.getItem("neel-theme"); if (saved) setTheme(saved); }catch(e){}
+
+if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){ $("wa").href = "whatsapp://send"; $("wa").removeAttribute("target"); }
+loadNumbers();
+</script>
+</body>
+</html>
