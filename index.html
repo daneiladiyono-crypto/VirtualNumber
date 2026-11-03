@@ -17,7 +17,6 @@
 @media (prefers-color-scheme:dark){
   :root{--paper:#0e0b1f; --card:#1a1633; --ink:#efeaff; --muted:#a39cc9; --line:#2d2751; --wa:#9a85ff; --wa-soft:#2a2252; --amber:#ffc83d; --err:#ff7a9c;}
 }
-}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.5;min-height:100vh}
@@ -31,7 +30,11 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;ma
 .hero{margin-bottom:28px}
 .hero h1{font-family:var(--head);font-weight:800;font-size:clamp(2rem,6vw,3.4rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 10px;max-width:14ch}
 .hero p{color:var(--muted);margin:0;max-width:52ch}
-.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.more{margin-bottom:14px;font-size:.92rem;color:var(--muted)}
+.more summary{cursor:pointer;font-weight:700;margin-bottom:10px}
+.dial{margin-top:2px}
+.panel .actions .btn{flex:1 1 auto;text-align:center}
+.layout{max-width:560px}
 @media(max-width:820px){.layout{grid-template-columns:1fr}}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
 .panel h2{font-family:var(--head);font-size:1.15rem;margin:0 0 12px}
@@ -100,7 +103,6 @@ html[data-theme="pink"]{--paper:#1c0a13;--card:#2b1220;--ink:#ffe9f1;--muted:#c9
         <button class="dot" data-t="hijau" style="background:#178a4a" aria-label="Hijau" aria-pressed="false" type="button"></button>
         <button class="dot" data-t="oranye" style="background:#e0561b" aria-label="Oranye" aria-pressed="false" type="button"></button>
         <button class="dot" data-t="pink" style="background:#d6246e" aria-label="Pink" aria-pressed="false" type="button"></button>
-        <button class="dot" data-t="ungu" style="background:#5b3df5" aria-label="Ungu" aria-pressed="false" type="button"></button>
       </div>
       <span class="badge">Gratis</span>
     </div>
@@ -109,32 +111,26 @@ html[data-theme="pink"]{--paper:#1c0a13;--card:#2b1220;--ink:#ffe9f1;--muted:#c9
   <section class="hero">
     <svg class="wa-logo " width="64" height="64" viewBox="0 0 32 32" aria-hidden="true"><path fill="#25D366" d="M16 2.5A13.5 13.5 0 0 0 4.3 22.7L2.5 29.5l6.9-1.8A13.5 13.5 0 1 0 16 2.5z"/><path fill="#fff" d="M22.3 19.2c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.200-.2.2-.4.2-.7.1-.3-.2-1.400-.5-2.600-1.600-1-.9-1.600-1.900-1.800-2.200-.2-.3 0-.5.1-.7.1-.1.300-.4.500-.5.1-.2.200-.3.300-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.700-1-2.300-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.400-.3.300-1 1-1 2.400s1 2.800 1.200 3c.1.200 2.100 3.200 5.100 4.500.7.300 1.300.5 1.700.6.700.2 1.400.2 1.900.1.600-.1 1.900-.8 2.100-1.500.3-.7.300-1.400.2-1.500-.1-.1-.3-.2-.6-.4z"/></svg>
     <h1>Nomor kosong untuk WhatsApp</h1>
-    <p>Pilih nomor virtual, pakai untuk daftar WhatsApp, lalu cek kode OTP yang masuk langsung di sini.</p>
+    <p>Dapatkan satu nomor virtual acak, pakai untuk daftar WhatsApp, lalu cek kode OTP yang masuk langsung di sini. Kurang cocok? Tekan Ganti Nomor.</p>
   </section>
 
   <div class="layout">
-    <section class="panel" aria-labelledby="h-list">
-      <h2 id="h-list">Nomor tersedia</h2>
-      <div class="tools">
-        <input id="search" type="search" placeholder="Cari nomor atau negara" aria-label="Cari nomor atau negara">
-        <button class="btn ghost" id="refresh" type="button">Muat ulang</button>
-      </div>
-      <div id="list" class="list" aria-live="polite"><div class="state">Memuat nomor...</div></div>
-    </section>
-
     <section class="panel" aria-labelledby="h-otp">
-      <h2 id="h-otp">Cek OTP</h2>
-      <p id="dial" class="dial">Belum ada nomor dipilih</p>
-      <div id="dialMeta" class="meta">Pilih nomor dari daftar, atau masukkan nomor sendiri.</div>
+      <h2 id="h-otp">Nomor kamu</h2>
+      <p id="dial" class="dial" aria-live="polite">Memuat nomor...</p>
+      <div id="dialMeta" class="meta"></div>
       <div class="actions">
+        <button class="btn" id="change" type="button" disabled>&#8635; Ganti Nomor</button>
         <button class="btn" id="check" type="button" disabled>Cek OTP</button>
         <button class="btn ghost" id="copy" type="button" disabled>Salin nomor</button>
         <a class="btn ghost" id="wa" href="https://web.whatsapp.com/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block"><svg class="wa-logo " width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><path fill="#25D366" d="M16 2.5A13.5 13.5 0 0 0 4.3 22.7L2.5 29.5l6.9-1.8A13.5 13.5 0 1 0 16 2.5z"/><path fill="#fff" d="M22.3 19.2c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.200-.2.2-.4.2-.7.1-.3-.2-1.400-.5-2.600-1.600-1-.9-1.600-1.900-1.800-2.200-.2-.3 0-.5.1-.7.1-.1.300-.4.500-.5.1-.2.200-.3.300-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.700-1-2.300-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.400-.3.300-1 1-1 2.400s1 2.800 1.200 3c.1.200 2.100 3.200 5.100 4.500.7.300 1.300.5 1.700.6.700.2 1.400.2 1.900.1.600-.1 1.900-.8 2.100-1.500.3-.7.300-1.400.2-1.500-.1-.1-.3-.2-.6-.4z"/></svg>Buka WhatsApp</a>
       </div>
+      <details class="more"><summary>Pakai nomor sendiri</summary>
       <form class="manual" id="manualForm" onsubmit="return false">
         <input id="manual" type="tel" inputmode="tel" placeholder="+6281234567890" aria-label="Nomor manual">
         <button class="btn ghost" id="useManual" type="button">Pakai</button>
       </form>
+      </details>
       <label class="auto"><input type="checkbox" id="auto"> Cek otomatis tiap 7 detik</label>
       <div id="result" aria-live="polite"><div class="state">Hasil OTP akan muncul di sini.</div></div>
     </section>
@@ -188,40 +184,44 @@ function toNumberItem(it){
   return {number: normalize(n), country: it.country || it.country_name || it.negara || it.region || ""};
 }
 
+function setLoading(on){
+  $("change").disabled = on;
+  if (on){ $("dial").textContent = "Memuat nomor..."; $("dialMeta").textContent = ""; $("check").disabled = true; $("copy").disabled = true; }
+}
+
 async function loadNumbers(){
-  const list = $("list");
-  list.innerHTML = '<div class="state">Memuat nomor...</div>';
+  setLoading(true);
   try{
     const res = await fetch(API_LIST);
     if (!res.ok) throw new Error("Server membalas " + res.status);
-    const json = await res.json();
-    const arr = findArray(json);
+    const arr = findArray(await res.json());
     numbers = (arr || []).map(toNumberItem).filter(Boolean);
-    if (!numbers.length) throw new Error("Daftar nomor kosong. Coba muat ulang beberapa saat lagi.");
-    render();
+    if (!numbers.length) throw new Error("Daftar nomor kosong");
+    pickRandom(true);
   }catch(e){
-    list.innerHTML = '<div class="state err">Gagal memuat nomor: ' + esc(e.message) + '. Periksa koneksi lalu tekan Muat ulang.</div>';
+    numbers = []; selected = null;
+    $("dial").textContent = "Gagal memuat nomor";
+    $("dialMeta").textContent = e.message + ". Tekan Ganti Nomor untuk coba lagi.";
+    $("change").disabled = false;
   }
 }
 
-function render(){
-  const q = $("search").value.trim().toLowerCase();
-  const rows = numbers.filter(n => !q || n.number.toLowerCase().includes(q) || n.country.toLowerCase().includes(q));
-  const list = $("list");
-  if (!rows.length){ list.innerHTML = '<div class="state">Tidak ada nomor yang cocok dengan pencarian.</div>'; return; }
-  list.innerHTML = rows.map(n =>
-    '<button type="button" class="row" data-n="' + esc(n.number) + '" aria-pressed="' + (selected && selected.number === n.number) + '">' +
-    '<span class="num">' + esc(n.number) + '</span><span class="meta">' + esc(n.country) + '</span></button>'
-  ).join("");
+function pickRandom(afterLoad){
+  if (!numbers.length) return loadNumbers();
+  const pool = numbers.filter(n => !selected || n.number !== selected.number);
+  if (!pool.length){
+    if (!afterLoad) return loadNumbers();
+    return select(numbers[0]);
+  }
+  select(pool[Math.floor(Math.random() * pool.length)]);
 }
 
 function select(item){
   selected = item;
   $("dial").textContent = item.number;
   $("dialMeta").textContent = item.country || "Nomor virtual";
-  $("check").disabled = false; $("copy").disabled = false;
+  $("change").disabled = false; $("check").disabled = false; $("copy").disabled = false;
   $("result").innerHTML = '<div class="state">Daftarkan nomor ini di WhatsApp, lalu tekan Cek OTP.</div>';
-  render();
 }
 
 function fmtTime(v){
@@ -271,16 +271,11 @@ function setAuto(){
   if ($("auto").checked) timer = setInterval(()=>{ if (selected) checkOtp(); }, 7000);
 }
 
-$("list").addEventListener("click", e => {
-  const b = e.target.closest(".row"); if (!b) return;
-  select(numbers.find(n => n.number === b.dataset.n));
-});
 $("result").addEventListener("click", e => {
   const c = e.target.closest(".code"); if (!c) return;
   navigator.clipboard.writeText(c.dataset.code).then(()=>toast("Kode disalin"), ()=>toast("Gagal menyalin"));
 });
-$("search").addEventListener("input", render);
-$("refresh").addEventListener("click", loadNumbers);
+$("change").addEventListener("click", () => pickRandom(false));
 $("check").addEventListener("click", checkOtp);
 $("auto").addEventListener("change", setAuto);
 $("copy").addEventListener("click", () => {
